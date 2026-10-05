@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import dev.eder.empleados.dto.EmpleadoResponse;
 import dev.eder.empleados.dto.EmpleadosRequest;
 import dev.eder.empleados.service.EmpleadoService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -26,31 +27,29 @@ public class EmpleadoController {
     private final EmpleadoService empleadoService;
 
     @GetMapping
-    public List<EmpleadoResponse> list(){
+    public List<EmpleadoResponse> listar() {
         return empleadoService.listar();
     }
 
     @GetMapping("/{id}")
-    public EmpleadoResponse obtenerPorId(@PathVariable Long id){
+    public EmpleadoResponse obtenerPorId(@PathVariable Long id) {
         return empleadoService.obtenerPorId(id);
     }
 
-    // Recibe la ENTIDAD directo
+    // @Valid revisa las anotaciones de EmpleadoRequest ANTES de entrar al método
     @PostMapping
-    public ResponseEntity<EmpleadoResponse> crear(@RequestBody EmpleadosRequest request){
+    public ResponseEntity<EmpleadoResponse> crear(@Valid @RequestBody EmpleadosRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(empleadoService.crear(request));
     }
 
     @PutMapping("/{id}")
-    public EmpleadoResponse actualizar(@PathVariable Long id, @RequestBody EmpleadosRequest request){
+    public EmpleadoResponse actualizar(@PathVariable Long id, @Valid @RequestBody EmpleadosRequest request) {
         return empleadoService.actualizar(id, request);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminar(@PathVariable Long id){
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         empleadoService.eliminar(id);
         return ResponseEntity.noContent().build();
     }
-
-
 }
