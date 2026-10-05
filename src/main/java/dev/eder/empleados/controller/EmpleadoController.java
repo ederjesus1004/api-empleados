@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import dev.eder.empleados.Entity.Empleado;
+import dev.eder.empleados.dto.EmpleadoResponse;
+import dev.eder.empleados.dto.EmpleadosRequest;
 import dev.eder.empleados.service.EmpleadoService;
 import lombok.RequiredArgsConstructor;
 
@@ -25,31 +26,30 @@ public class EmpleadoController {
     private final EmpleadoService empleadoService;
 
     @GetMapping
-    public List<Empleado> list(){
+    public List<EmpleadoResponse> list(){
         return empleadoService.listar();
     }
 
     @GetMapping("/{id}")
-    public Empleado obtenerPorId(@PathVariable Long id){
+    public EmpleadoResponse obtenerPorId(@PathVariable Long id){
         return empleadoService.obtenerPorId(id);
     }
 
     // Recibe la ENTIDAD directo
     @PostMapping
-    public ResponseEntity<Empleado> crear(@RequestBody Empleado empleado){
-        return ResponseEntity.status(HttpStatus.CREATED).body(empleadoService.crear(empleado));
+    public ResponseEntity<EmpleadoResponse> crear(@RequestBody EmpleadosRequest request){
+        return ResponseEntity.status(HttpStatus.CREATED).body(empleadoService.crear(request));
     }
 
     @PutMapping("/{id}")
-    public Empleado actualizar(@PathVariable Long id, @RequestBody Empleado empleado){
-        return empleadoService.actualizar(id, empleado);
+    public EmpleadoResponse actualizar(@PathVariable Long id, @RequestBody EmpleadosRequest request){
+        return empleadoService.actualizar(id, request);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id){
         empleadoService.eliminar(id);
         return ResponseEntity.noContent().build();
-
     }
 
 
